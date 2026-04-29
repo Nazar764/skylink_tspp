@@ -1,6 +1,7 @@
 /*Навігація по сайту має дублюватись на кожну вкладку*/
 
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Navigation.css';
 
 interface NavigationProps {
@@ -8,6 +9,11 @@ interface NavigationProps {
 }
 
 const Navigation: React.FC<NavigationProps> = ({ onChatOpen }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => setMenuOpen((current) => !current);
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <nav>
       <div className="logo">
@@ -18,12 +24,24 @@ const Navigation: React.FC<NavigationProps> = ({ onChatOpen }) => {
         </div>
         Sky<span>Link</span>
       </div>
-      <ul>
-        <li><a href="#flights">Рейси</a></li>
-        <li><a href="#tickets">Квитки</a></li>
-        <li><a href="#luggage">Багаж</a></li>
-        <li><a href="#support">Підтримка</a></li>
-        <li><a href="#about">Про нас</a></li>
+      <button
+        type="button"
+        className={`burger ${menuOpen ? 'open' : ''}`}
+        aria-expanded={menuOpen}
+        aria-label="Toggle navigation menu"
+        onClick={toggleMenu}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+
+      <ul className={`nav-menu ${menuOpen ? 'open' : ''}`}>
+        <li><Link to="/" onClick={closeMenu}>Головна</Link></li>
+        <li><Link to="/flights" onClick={closeMenu}>Рейси</Link></li>
+        <li><Link to="/tickets" onClick={closeMenu}>Квитки</Link></li>
+        <li><Link to="/luggage" onClick={closeMenu}>Багаж</Link></li>
+        <li><Link to="/support" onClick={closeMenu}>Підтримка</Link></li>
       </ul>
       <div className="nav-btns">
         <button className="btn-ghost" onClick={onChatOpen}>Увійти</button>

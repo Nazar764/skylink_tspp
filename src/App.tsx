@@ -1,32 +1,30 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navigation from './Components/Navigation';
-import Hero from './Components/Hero';
-import About from './Components/About';
-import Footer from './Components/Footer';
+import Home from './pages/Home';
+import Flights from './pages/Flights';
+import Tickets from './pages/Tickets';
+import Luggage from './pages/Luggage';
+import Support from './pages/Support';
 import ChatBot from './Components/ChatBot';
-import Features from './Components/Features';
 import './App.css'; // Або './index.css', залежно від того, де твої глобальні стилі
 
 const App: React.FC = () => {
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
   return (
-    <div className="app-wrapper">
+    <BrowserRouter>
       <Navigation onChatOpen={() => setIsChatOpen(true)} />
-      
-      <Hero />
-
-      <Features />
-      
-      {/* Передаємо функцію відкриття чату в секцію "Про нас" */}
-      <About onChatOpen={() => setIsChatOpen(true)} />
-      
-      
-      <Footer />
-      
-      {/* Сам чат-бот, який приймає стан і функцію для його зміни */}
+      <Routes>
+        <Route path="/" element={<Home onChatOpen={() => setIsChatOpen(true)} />} />
+        <Route path="/flights" element={<Flights />} />
+        <Route path="/tickets" element={<Tickets />} />
+        <Route path="/luggage" element={<Luggage />} />
+        <Route path="/support" element={<Support />} />
+        <Route path="*" element={<Navigate replace to="/" />} />
+      </Routes>
       <ChatBot isOpen={isChatOpen} onToggle={setIsChatOpen} />
-    </div>
+    </BrowserRouter>
   );
 };
 

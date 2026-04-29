@@ -1,102 +1,121 @@
-/* Navigation Styles */
+/* NAV */
 nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 1.2rem 3rem;
+  padding: 1rem 2rem;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
   z-index: 100;
   border-bottom: 1px solid var(--border);
+  position: relative;
 }
 
+/* LOGO */
 .logo {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
   font-size: 1.5rem;
-  color: var(--ink);
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.logo span {
-  color: var(--sky);
-}
-
-.logo-icon {
-  width: 32px;
-  height: 32px;
-  background: var(--sky);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo-icon svg {
-  width: 18px;
-  height: 18px;
-  fill: white;
-}
-
-nav ul {
+/* MENU */
+.nav-menu {
   display: flex;
   gap: 2rem;
   list-style: none;
+  margin: 0 auto;
 }
 
-nav ul a {
+.nav-menu a {
   text-decoration: none;
   color: var(--ink-mid);
   font-size: 0.9rem;
-  font-weight: 400;
-  transition: color 0.2s;
 }
 
-nav ul a:hover {
-  color: var(--sky);
-}
-
+/* BUTTONS */
 .nav-btns {
   display: flex;
-  gap: 0.75rem;
-  align-items: center;
+  gap: 0.5rem;
 }
 
-.btn-ghost {
-  padding: 0.5rem 1.2rem;
-  border: 1.5px solid var(--border);
-  border-radius: 50px;
-  background: none;
-  color: var(--ink-mid);
-  font-size: 0.85rem;
+/* BURGER */
+.burger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.2s;
-}
-
-.btn-ghost:hover {
-  border-color: var(--sky);
-  color: var(--sky);
-}
-
-.btn-primary {
-  padding: 0.5rem 1.4rem;
+  margin-left: 1rem;
   border: none;
-  border-radius: 50px;
-  background: var(--sky);
-  color: white;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.2s;
+  background: transparent;
+  padding: 0;
 }
 
-.btn-primary:hover {
-  background: var(--sky-dark);
-  transform: translateY(-1px);
+.burger span {
+  width: 22px;
+  height: 2px;
+  background: var(--ink);
+  display: block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.burger.open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.burger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger.open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 880px) {
+
+  /* ХОВАЄМО МЕНЮ */
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 65px;
+    right: 1rem;
+    width: 200px;
+
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+
+    flex-direction: column;
+    gap: 0.8rem;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+
+  /* ПОКАЗУЄМО ПРИ КЛІКУ */
+  .nav-menu.open {
+    display: flex;
+  }
+
+  /* БУРГЕР ВИДИМИЙ */
+  .burger {
+    display: flex;
+  }
+
+  /* ВАЖЛИВО: порядок справа */
+  .nav-btns {
+    order: 2;
+  }
+
+  .burger {
+    order: 3;
+  }
+
+  /* прибираємо зайві відступи */
+  .nav-menu {
+    margin-left: 0;
+  }
 }

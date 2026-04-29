@@ -26,7 +26,7 @@ const About: React.FC<AboutProps> = ({ onChatOpen }) => {
           
           {/* TEXT */}
           <div className="about-text">
-            <div className="section-label">Про нас</div>
+<div className="section-label">Головна сторінка</div>
             <h2 className="section-title">SkyLink — сучасний сервіс для подорожей</h2>
             
             <p>
@@ -95,34 +95,25 @@ const About: React.FC<AboutProps> = ({ onChatOpen }) => {
 
           <div className="comment-list">
             {COMMENTS.map((c) => (
-<article className="comment-card">
-  
-  <div className="comment-header">
-    
-    <div className="avatar">
-      {c.avatar ? (
-        <img src={c.avatar} alt={c.name} />
-      ) : (
-        <span>👤</span>
-      )}
-    </div>
+              <article className="comment-card" key={c.id}>
+              <div className="comment-header">
+                <div className="avatar">
+                  {c.avatar ? (
+                    <img src={c.avatar} alt={c.name} />) : (<span>👤</span>)}
+                </div>
+              <div className="comment-meta">
+                <strong>{c.name}</strong>
+                <span className="comment-date">{c.date}</span>
+                <div className="stars">
+                  {'★'.repeat(c.rating)}
+                  {'☆'.repeat(5 - c.rating)}
+                </div>
+            </div>
+        </div>
+          <p className="comment-text">{c.text}</p>
+          </article>
+        ))}
 
-    <div className="comment-meta">
-      <strong>{c.name}</strong>
-      <span className="comment-date">{c.date}</span>
-
-      <div className="stars">
-        {'★'.repeat(c.rating)}
-        {'☆'.repeat(5 - c.rating)}
-      </div>
-    </div>
-
-  </div>
-
-  <p className="comment-text">{c.text}</p>
-
-</article>
-            ))}
           </div>
 
         </div>

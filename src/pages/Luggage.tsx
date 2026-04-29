@@ -1,5 +1,5 @@
 import React from 'react';
-import Footer from '../Components/Footer';
+import Footer from '../Components/Allused_0/Footer';
 
 const Luggage: React.FC = () => {
   return (

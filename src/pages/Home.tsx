@@ -1,8 +1,8 @@
 import React from 'react';
-import Hero from '../Components/Hero';
-import About from '../Components/About';
-import Footer from '../Components/Footer';
-import Features from '../Components/Features';
+import Hero from '../Components/Home_1/Hero';
+import About from '../Components/Home_1/About';
+import Footer from '../Components/Allused_0/Footer';
+import Features from '../Components/Home_1/Features';
 
 interface HomeProps {
   onChatOpen: () => void;

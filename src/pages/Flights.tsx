@@ -1,5 +1,6 @@
 import React from 'react';
-import Footer from '../Components/Footer';
+import Footer from '../Components/Allused_0/Footer';
+import MainFlights from '../Components/Flight_2/MainFlights';
 
 const Flights: React.FC = () => {
   return (
@@ -9,18 +10,7 @@ const Flights: React.FC = () => {
         flexDirection: 'column',
       }}
     >
-      <main className="page-wrapper" style={{ flex: 1 }}>
-        <section className="section-center">
-          <div className="section-header">
-            <div className="section-label">Рейси</div>
-            <h1>Пошук та бронювання авіарейсів</h1>
-          </div>
-          <p>
-            Знайдіть найшвидші та найвигідніші рейси. Введіть місто відправлення
-            та призначення, оберіть дати і ми підберемо найкращі варіанти для вас.
-          </p>
-        </section>
-      </main>
+      <MainFlights />
       <Footer />
     </div>
   );

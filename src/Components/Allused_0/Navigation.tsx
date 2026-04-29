@@ -8,7 +8,7 @@ interface NavigationProps {
   onChatOpen: () => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ onChatOpen }) => {
+const Navigation: React.FC<NavigationProps> = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen((current) => !current);
@@ -44,8 +44,8 @@ const Navigation: React.FC<NavigationProps> = ({ onChatOpen }) => {
         <li><Link to="/support" onClick={closeMenu}>Підтримка</Link></li>
       </ul>
       <div className="nav-btns">
-        <button className="btn-ghost" onClick={onChatOpen}>Увійти</button>
-        <button className="btn-primary" onClick={onChatOpen}>Реєстрація</button>
+        <button className="btn-ghost">Увійти</button>
+        <button className="btn-primary">Реєстрація</button>
       </div>
     </nav>
   );

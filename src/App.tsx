@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Navigation from './Components/Navigation';
+import Navigation from './Components/Allused_0/Navigation';
 import Home from './pages/Home';
 import Flights from './pages/Flights';
 import Tickets from './pages/Tickets';
 import Luggage from './pages/Luggage';
 import Support from './pages/Support';
-import ChatBot from './Components/ChatBot';
+import ChatBot from './Components/Home_1/ChatBot';
 import './App.css'; // Або './index.css', залежно від того, де твої глобальні стилі
 
 const App: React.FC = () => {

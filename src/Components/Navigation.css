@@ -1,38 +1,4 @@
-/* ========== RESET & VARIABLES ========== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  /* Colors */
-  --sky: #0EA5E9;
-  --sky-dark: #0369A1;
-  --sky-light: #E0F2FE;
-  --sky-pale: #F0F9FF;
-
-  --ink: #0C1B2E;
-  --ink-mid: #2D4B6B;
-  --ink-muted: #6B8FAF;
-
-  --white: #FFFFFF;
-  --border: #D4E6F4;
-
-  /* Border radius */
-  --r: 14px;
-  --r-sm: 8px;
-  --r-lg: 24px;
-}
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--white);
-  color: var(--ink);
-  overflow-x: hidden;
-}
-
-/* ========== NAVIGATION ========== */
+/* Navigation Styles */
 nav {
   display: flex;
   align-items: center;

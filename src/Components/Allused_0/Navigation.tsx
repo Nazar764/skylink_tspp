@@ -5,14 +5,30 @@ import { Link } from 'react-router-dom';
 import './Navigation.css';
 
 interface NavigationProps {
+  user: any | null;
+  onLoginClick: () => void;
+  onRegisterClick: () => void;
+  onSignOut: () => void;
   onChatOpen: () => void;
 }
 
-const Navigation: React.FC<NavigationProps> = () => {
+const Navigation: React.FC<NavigationProps> = ({ user, onLoginClick, onRegisterClick, onSignOut }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen((current) => !current);
   const closeMenu = () => setMenuOpen(false);
+  const toggleUserMenu = () => setUserMenuOpen((current) => !current);
+  const closeUserMenu = () => setUserMenuOpen(false);
+
+  const displayName = user?.user_metadata?.full_name || user?.email || 'Користувач';
+  const avatarUrl = user?.user_metadata?.avatar_url || user?.app_metadata?.provider_avatar_url || null;
+  const initials = displayName
+    .split(' ')
+    .map((part: string) => part[0])
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
 
   return (
     <nav>
@@ -44,8 +60,35 @@ const Navigation: React.FC<NavigationProps> = () => {
         <li><Link to="/support" onClick={closeMenu}>Підтримка</Link></li>
       </ul>
       <div className="nav-btns">
-        <button className="btn-ghost">Увійти</button>
-        <button className="btn-primary">Реєстрація</button>
+        {user ? (
+          <div className="user-block">
+            <button className="user-pill" type="button" onClick={toggleUserMenu}>
+              {avatarUrl ? (
+                <img className="user-avatar" src={avatarUrl} alt="Аватар" />
+              ) : (
+                <div className="user-avatar user-avatar--fallback">{initials}</div>
+              )}
+              <span>{displayName}</span>
+            </button>
+            {userMenuOpen && (
+              <div className="user-menu" onMouseLeave={closeUserMenu}>
+                <div className="user-menu__header">Мій акаунт</div>
+                <div className="user-menu__actions">
+                  <button type="button" className="btn-ghost">Профіль</button>
+                  <button type="button" className="btn-ghost">Мої квитки</button>
+                </div>
+                <button type="button" className="btn-ghost btn-ghost--danger user-menu__logout" onClick={onSignOut}>
+                  Вийти
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
+            <button className="btn-ghost" type="button" onClick={onLoginClick}>Увійти</button>
+            <button className="btn-primary" type="button" onClick={onRegisterClick}>Реєстрація</button>
+          </>
+        )}
       </div>
     </nav>
   );

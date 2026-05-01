@@ -1,10 +1,8 @@
-/*Так це вкладка з чат ботом поки що він працює фейково я думаю нам цього хватить для здачі лаби*/
-
 import React, { useState, useRef, useEffect } from 'react';
 import './ChatBot.css';
 
 interface Message {
-  id: number;
+  id: string;
   text: string;
   isUser: boolean;
   timestamp: Date;
@@ -15,12 +13,15 @@ interface ChatBotProps {
   onToggle?: (open: boolean) => void;
 }
 
+const SUPABASE_FUNCTION_URL = 'https://htafeakzwjwdjfozpcnm.supabase.co/functions/v1/chat';
+const SUPABASE_ANON = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
 const ChatBot: React.FC<ChatBotProps> = ({ isOpen: isOpenProp, onToggle }) => {
   const [localOpen, setLocalOpen] = useState(false);
   const isOpen = isOpenProp ?? localOpen;
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: 1,
+      id: String(Date.now()),
       text: 'Привіт! 👋 Я ваш помічник SkyLink. Як я можу допомогти вам сьогодні?',
       isUser: false,
       timestamp: new Date()
@@ -48,7 +49,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen: isOpenProp, onToggle }) => {
     if (!inputValue.trim()) return;
 
     const userMessage: Message = {
-      id: messages.length + 1,
+      id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()),
       text: inputValue,
       isUser: true,
       timestamp: new Date()
@@ -58,28 +59,51 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen: isOpenProp, onToggle }) => {
     setInputValue('');
     setIsTyping(true);
 
-    // Симуляція відповіді бота
-    setTimeout(() => {
-      const botResponses = [
-        'Дякую за ваше запитання! Наші фахівці зв\'яжуться з вами найближчим часом.',
-        'Я можу допомогти вам з інформацією про рейси, бронюванням квитків або підтримкою.',
-        'Будь ласка, уточніть ваше запитання, і я постараюся допомогти.',
-        'Для термінових питань рекомендуємо зателефонувати на гарячу лінію: +380-XX-XXX-XX-XX',
-        'Дякую за звернення! Чи є ще щось, чим я можу допомогти?'
-      ];
+    try {
+      const history = [...messages, userMessage].map(m => ({
+        role: m.isUser ? 'user' : 'assistant',
+        content: m.text,
+      }));
 
-      const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
+      const response = await fetch(SUPABASE_FUNCTION_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON}`,
+          'apikey': SUPABASE_ANON,
+        },
+        body: JSON.stringify({ messages: history }),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error('Function error', response.status, text);
+        throw new Error(`Function returned ${response.status}`);
+      }
+
+      const data = await response.json();
+      const replyText = data?.reply ?? 'Вибачте, сталася помилка.';
 
       const botMessage: Message = {
-        id: messages.length + 2,
-        text: randomResponse,
+        id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now() + 1),
+        text: replyText,
         isUser: false,
         timestamp: new Date()
       };
 
       setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error('Chat error:', error);
+      const botMessage: Message = {
+        id: String(Date.now() + 2),
+        text: 'Вибачте, не вдалося отримати відповідь. Спробуйте пізніше.',
+        isUser: false,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, botMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1000 + Math.random() * 2000);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -91,7 +115,6 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen: isOpenProp, onToggle }) => {
 
   return (
     <>
-      {/* Плаваюча кнопка чату */}
       <div className="chatbot-toggle" onClick={toggleChat}>
         {isOpen ? (
           <svg viewBox="0 0 24 24" width="24" height="24">
@@ -104,10 +127,8 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen: isOpenProp, onToggle }) => {
         )}
       </div>
 
-      {/* Вікно чату */}
       {isOpen && (
         <div className="chatbot-window">
-          {/* Заголовок */}
           <div className="chatbot-header">
             <div className="chatbot-avatar">
               <svg viewBox="0 0 24 24" width="20" height="20">
@@ -120,7 +141,6 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen: isOpenProp, onToggle }) => {
             </div>
           </div>
 
-          {/* Повідомлення */}
           <div className="chatbot-messages">
             {messages.map((message) => (
               <div
@@ -152,7 +172,6 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen: isOpenProp, onToggle }) => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Поле введення */}
           <div className="chatbot-input">
             <input
               type="text"

@@ -1,7 +1,6 @@
 /*Навігація по сайту має дублюватись на кожну вкладку*/
-
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navigation.css';
 
 interface NavigationProps {
@@ -9,12 +8,14 @@ interface NavigationProps {
   onLoginClick: () => void;
   onRegisterClick: () => void;
   onSignOut: () => void;
-  onChatOpen: () => void;
+  onChatOpen: () => void; // Додано, бо воно було в props, але не використовувалося в деструктуризації
 }
 
 const Navigation: React.FC<NavigationProps> = ({ user, onLoginClick, onRegisterClick, onSignOut }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const toggleMenu = () => setMenuOpen((current) => !current);
   const closeMenu = () => setMenuOpen(false);
@@ -30,9 +31,14 @@ const Navigation: React.FC<NavigationProps> = ({ user, onLoginClick, onRegisterC
     .substring(0, 2)
     .toUpperCase();
 
+  const handleGoToProfile = () => {
+    navigate('/profile');
+    closeUserMenu();
+  };
+
   return (
     <nav>
-      <div className="logo">
+      <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
         <div className="logo-icon">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
@@ -40,6 +46,7 @@ const Navigation: React.FC<NavigationProps> = ({ user, onLoginClick, onRegisterC
         </div>
         Sky<span>Link</span>
       </div>
+      
       <button
         type="button"
         className={`burger ${menuOpen ? 'open' : ''}`}
@@ -59,25 +66,41 @@ const Navigation: React.FC<NavigationProps> = ({ user, onLoginClick, onRegisterC
         <li><Link to="/luggage" onClick={closeMenu}>Багаж</Link></li>
         <li><Link to="/support" onClick={closeMenu}>Підтримка</Link></li>
       </ul>
+      
       <div className="nav-btns">
         {user ? (
           <div className="user-block">
             <button className="user-pill" type="button" onClick={toggleUserMenu}>
               {avatarUrl ? (
-                <img className="user-avatar" src={avatarUrl} alt="Аватар" />
+                <img 
+                  className="user-avatar" 
+                  src={avatarUrl} 
+                  alt="Аватар" 
+                  onError={(e) => { e.currentTarget.src = 'https://ui-avatars.com/api/?name=' + initials + '&background=random' }} 
+                />
               ) : (
                 <div className="user-avatar user-avatar--fallback">{initials}</div>
               )}
               <span>{displayName}</span>
             </button>
+            
             {userMenuOpen && (
-              <div className="user-menu" onMouseLeave={closeUserMenu}>
+              // Прибрав onMouseLeave для тестування
+              <div className="user-menu">
                 <div className="user-menu__header">Мій акаунт</div>
                 <div className="user-menu__actions">
-                  <button type="button" className="btn-ghost">Профіль</button>
-                  <button type="button" className="btn-ghost">Мої квитки</button>
+                  <button type="button" className="btn-ghost" onClick={handleGoToProfile}>
+                   Профіль
+                  </button>
+                  <button type="button" className="btn-ghost" onClick={closeUserMenu}>
+                    Мої квитки
+                  </button>
                 </div>
-                <button type="button" className="btn-ghost btn-ghost--danger user-menu__logout" onClick={onSignOut}>
+                <button 
+                  type="button" 
+                  className="btn-ghost btn-ghost--danger user-menu__logout" 
+                  onClick={() => { onSignOut(); closeUserMenu(); }}
+                >
                   Вийти
                 </button>
               </div>

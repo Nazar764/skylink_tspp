@@ -9,7 +9,9 @@ import Luggage from './pages/Luggage';
 import Support from './pages/Support';
 import ChatBot from './Components/Home_1/ChatBot';
 import { supabase } from './utils/supabase';
+import  Profile  from './Components/Allused_0/Profile';
 import type { User } from '@supabase/supabase-js';
+
 import './App.css'; 
 
 const App: React.FC = () => {
@@ -50,6 +52,7 @@ const App: React.FC = () => {
       />
       <Routes>
         <Route path="/" element={<Home onChatOpen={() => setIsChatOpen(true)} />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/flights" element={<Flights />} />
         <Route path="/Reservation" element={<TAXI_HOTEL />} />
         <Route path="/luggage" element={<Luggage />} />

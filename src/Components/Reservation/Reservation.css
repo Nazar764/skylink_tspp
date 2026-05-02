@@ -1,0 +1,257 @@
+/* Основний контейнер */
+.reservation-section {
+  font-family: 'Inter', system-ui, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  color: #1a1a1a;
+}
+
+.reservation-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.reservation-header h2 {
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  color: #0b192c;
+}
+
+.reservation-header p {
+  color: #666;
+  font-size: 18px;
+}
+
+/* Таби (Вкладки) */
+.reservation-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.reservation-tabs button {
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  background-color: #f4f7fb;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reservation-tabs button:hover {
+  background-color: #e2e8f0;
+}
+
+.reservation-tabs button.active {
+  background-color: #00a8ff; /* Блакитний колір кнопок з твого фото */
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 168, 255, 0.3);
+}
+
+/* Сітка готелів */
+.hotels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.hotel-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid #f0f4f8;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hotel-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+.hotel-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.hotel-info {
+  padding: 24px;
+}
+
+.hotel-city {
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.hotel-name {
+  font-size: 22px;
+  margin: 10px 0 20px;
+  color: #0b192c;
+  font-weight: 800;
+}
+
+.hotel-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hotel-price {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+.book-btn {
+  padding: 12px 24px;
+  background-color: #00a8ff;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.book-btn:hover {
+  background-color: #0097e6;
+}
+
+/* Форма таксі */
+.taxi-form-container {
+  display: flex;
+  justify-content: center;
+}
+
+.taxi-form {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid #f0f4f8;
+  width: 100%;
+  max-width: 550px;
+}
+
+.taxi-form h3 {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #0b192c;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 15px;
+  color: #333;
+}
+
+.form-group input {
+  padding: 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  border-color: #00a8ff;
+}
+
+.disabled-input {
+  background-color: #f8fafc !important;
+  color: #64748b;
+  cursor: not-allowed;
+  font-weight: 500;
+}
+
+.hint {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.book-taxi-btn {
+  width: 100%;
+  padding: 16px;
+  background-color: #00a8ff;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+.book-taxi-btn:hover {
+  background-color: #0097e6;
+}
+
+/* Фільтри міст */
+.city-filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.city-btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.city-btn.active {
+  background: #00a8ff;
+  color: white;
+  border-color: #00a8ff;
+}
+
+/* Пагінація */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  background: #0b192c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+

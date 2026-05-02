@@ -55,7 +55,7 @@ const Navigation: React.FC<NavigationProps> = ({ user, onLoginClick, onRegisterC
       <ul className={`nav-menu ${menuOpen ? 'open' : ''}`}>
         <li><Link to="/" onClick={closeMenu}>Головна</Link></li>
         <li><Link to="/flights" onClick={closeMenu}>Рейси</Link></li>
-        <li><Link to="/tickets" onClick={closeMenu}>Квитки</Link></li>
+        <li><Link to="/Reservation" onClick={closeMenu}>Бронювання</Link></li>
         <li><Link to="/luggage" onClick={closeMenu}>Багаж</Link></li>
         <li><Link to="/support" onClick={closeMenu}>Підтримка</Link></li>
       </ul>

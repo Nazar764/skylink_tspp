@@ -4,13 +4,13 @@ import Navigation from './Components/Allused_0/Navigation';
 import AuthModal from './Components/Allused_0/AuthModal';
 import Home from './pages/Home';
 import Flights from './pages/Flights';
-import Tickets from './pages/Tickets';
+import TAXI_HOTEL from './pages/Taxi';
 import Luggage from './pages/Luggage';
 import Support from './pages/Support';
 import ChatBot from './Components/Home_1/ChatBot';
 import { supabase } from './utils/supabase';
 import type { User } from '@supabase/supabase-js';
-import './App.css'; // Або './index.css', залежно від того, де твої глобальні стилі
+import './App.css'; 
 
 const App: React.FC = () => {
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
@@ -51,7 +51,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Home onChatOpen={() => setIsChatOpen(true)} />} />
         <Route path="/flights" element={<Flights />} />
-        <Route path="/tickets" element={<Tickets />} />
+        <Route path="/Reservation" element={<TAXI_HOTEL />} />
         <Route path="/luggage" element={<Luggage />} />
         <Route path="/support" element={<Support />} />
         <Route path="*" element={<Navigate replace to="/" />} />

@@ -49,7 +49,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose }) => {
         });
         if (signInError) throw signInError;
       } else {
-        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        const { error: signUpError } = await supabase.auth.signUp({
           email,
           password,
           options: {

@@ -13,6 +13,7 @@ const Flights: React.FC = () => {
       <MainFlights />
       <Footer />
     </div>
+    
   );
 };
 

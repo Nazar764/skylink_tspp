@@ -3,78 +3,68 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
 };
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: corsHeaders });
+    return new Response("ok", { headers: corsHeaders });
   }
 
   try {
     const { messages } = await req.json();
 
-    if (!Array.isArray(messages)) {
-      return new Response(
-        JSON.stringify({ error: "messages array required" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const apiKey = Deno.env.get("GEMINI_API_KEY");
-
-    if (!apiKey) {
-      return new Response(
-        JSON.stringify({ error: "Missing GEMINI_API_KEY" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // ✅ system prompt правильно через model (а не user)
-    const contents = [
-      {
-        role: "model",
-        parts: [
-          {
-            text: "Ти — помічник авіасервісу SkyLink. Відповідай українською, коротко і по суті.",
-          },
-        ],
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${Deno.env.get("OPENROUTER_API_KEY")}`,
+        "HTTP-Referer": "https://skylink.app",
+        "X-OpenRouter-Title": "SkyLink",
       },
-      ...messages.slice(-10).map((m: any) => ({
-        role: m.role === "assistant" ? "model" : "user",
-        parts: [{ text: String(m.content || "") }],
-      })),
-    ];
-
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contents }),
-      }
-    );
+      body: JSON.stringify({
+        model: "nousresearch/hermes-3-llama-3.1-405b:free",
+        messages: [
+          {
+            role: "system",
+            content: "Ти — помічник авіасервісу SkyLink. Відповідай українською мовою. Допомагай з питаннями про рейси, бронювання квитків, багаж, реєстрацію та подорожі. Будь ввічливим і лаконічним."
+          },
+          ...messages
+        ],
+      }),
+    });
 
     const data = await response.json();
+    console.log("OpenRouter response:", JSON.stringify(data));
 
-    console.log("GEMINI RESPONSE:", JSON.stringify(data, null, 2));
+    if (data.error) {
+      throw new Error(`OpenRouter error: ${data.error.message}`);
+    }
 
-    // 🔥 SAFETY: ніяких падінь
-    const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      data?.error?.message ||
-      "No response from AI";
+    const reply = data.choices?.[0]?.message?.content ?? "Вибачте, не вдалося отримати відповідь.";
 
-    return new Response(
-      JSON.stringify({ reply }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
-  } catch (err) {
-    console.error("FATAL ERROR:", err);
-
-    return new Response(
-      JSON.stringify({ error: String(err) }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ reply }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 });
+
+
+
+
+
+
+
+/----------------------------/ БАЗА ДАНИХ /----------------------------/
+
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = 'ТВОЇ_URL';
+const supabaseKey = 'ТВОЇ_KEY';
+
+export const supabase = createClient(supabaseUrl, supabaseKey);

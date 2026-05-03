@@ -60,11 +60,11 @@ const About: React.FC<AboutProps> = ({ onChatOpen }) => {
         text,
         created_at,
         clients (
-          id,
+          id, 
           full_name,
           avatar_url
-          )
-      `)
+        )
+      `) // ФІКС: Тут було client_id, тепер всюди просто id
       .order('created_at', { ascending: false });
 
     if (error) {

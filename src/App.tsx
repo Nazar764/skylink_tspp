@@ -9,6 +9,7 @@ import Luggage from './pages/Luggage';
 import Support from './pages/Support';
 import ChatBot from './Components/Home_1/ChatBot';
 import { supabase } from './utils/supabase';
+import MyTickets from './Components/Allused_0/MyTickets';
 import  Profile  from './Components/Allused_0/Profile';
 import FlightBooking from './Components/Flight_2/FlightBooking';
 import type { User } from '@supabase/supabase-js';
@@ -55,6 +56,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Home onChatOpen={() => setIsChatOpen(true)} />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/flights" element={<Flights />} />
+        <Route path="/my-tickets" element={<MyTickets />} />
         <Route path="/Reservation" element={<TAXI_HOTEL />} />
         <Route path="/luggage" element={<Luggage />} />
         <Route path="/support" element={<Support />} />

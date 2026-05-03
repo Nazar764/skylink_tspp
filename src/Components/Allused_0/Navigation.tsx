@@ -141,9 +141,9 @@ const Navigation: React.FC<NavigationProps> = ({
                     Профіль
                   </button>
 
-                  <button type="button" className="btn-ghost" onClick={closeUserMenu}>
-                    Мої квитки
-                  </button>
+                <button type="button" className="btn-ghost" onClick={() => { closeUserMenu(); navigate('/my-tickets');}}>
+                 Мої квитки 
+                </button>
                 </div>
 
                 <button

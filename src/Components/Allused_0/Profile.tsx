@@ -27,6 +27,16 @@ const Profile: React.FC = () => {
     avatar_url: ''
   });
 
+const [phoneCode, setPhoneCode] = useState('+380');
+const [open, setOpen] = useState(false);
+
+const options = [
+  { code: '+380', flag: '🇺🇦' },
+  { code: '+48', flag: '🇵🇱' },
+  { code: '+49', flag: '🇩🇪' },
+  { code: '+1', flag: '🇺🇸' }
+];
+
   useEffect(() => {
     fetchProfile();
   }, []);
@@ -255,20 +265,66 @@ const Profile: React.FC = () => {
                 )}
               </div>
 
-              <div className="info-item">
-                <label>Номер телефону</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={formData.phone_number}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone_number: e.target.value })
-                    }
-                  />
-                ) : (
-                  <p>{user?.phone_number || 'Додати номер'}</p>
-                )}
+<div className="info-item">
+  <label>Номер телефону</label>
+
+  {isEditing ? (
+    <div className="phone-input-box">
+      <div className={`phone-prefix custom-select ${open ? 'open' : ''}`}>
+        <div
+          className="select-selected"
+          onClick={() => setOpen(!open)}
+        >
+          <span>{options.find(o => o.code === phoneCode)?.flag}</span>
+          {phoneCode}
+        </div>
+
+        {open && (
+          <div className="select-dropdown">
+            {options.map((opt) => (
+              <div
+                key={opt.code}
+                className="select-item"
+                onClick={() => {
+                  setPhoneCode(opt.code);
+                  setOpen(false);
+
+                  const onlyNumbers = formData.phone_number
+                    .replace(/\D/g, '')
+                    .slice(-9);
+
+                  setFormData({
+                    ...formData,
+                    phone_number: opt.code + onlyNumbers
+                  });
+                }}
+              >
+                {opt.flag} {opt.code}
               </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <input
+        type="tel"
+        placeholder="Номер телефону"
+        value={formData.phone_number.replace(phoneCode, '')}
+        maxLength={9}
+        onChange={(e) => {
+          const number = e.target.value.replace(/\D/g, '').slice(0, 9);
+
+          setFormData({
+            ...formData,
+            phone_number: phoneCode + number
+          });
+        }}
+      />
+    </div>
+  ) : (
+    <p>{user?.phone_number || 'Додати номер'}</p>
+  )}
+</div>
             </div>
           </section>
 

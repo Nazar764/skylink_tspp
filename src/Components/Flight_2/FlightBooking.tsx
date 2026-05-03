@@ -55,10 +55,19 @@ const FlightBooking: React.FC = () => {
   const [paymentType, setPaymentType] = useState<PaymentType>('card');
   const [bonusToUse, setBonusToUse] = useState(0);
   const [remind, setRemind] = useState(true);
-
+  const [phoneCode, setPhoneCode] = useState('+380');
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [saving, setSaving] = useState(false);
 
+const [open, setOpen] = useState(false);
+
+const options = [
+  { code: '+380', flag: '🇺🇦' },
+  { code: '+48', flag: '🇵🇱' },
+  { code: '+49', flag: '🇩🇪' },
+  { code: '+1', flag: '🇺🇸' }
+];
+  
   const [passenger, setPassenger] = useState({
     firstName: '',
     lastName: '',
@@ -452,7 +461,59 @@ const updatedSeat = updatedSeats[0];
                     onChange={(e) => handlePassportDateChange(e.target.value)}
                   />
 
-                  <input placeholder="Телефон" value={passenger.phone} onChange={(e) => setPassenger({ ...passenger, phone: e.target.value })} />
+<div className="phone-input-box">
+  <div className="phone-prefix custom-select">
+    
+    <div
+      className="select-selected"
+      onClick={() => setOpen(!open)}
+    >
+      <span>
+        {options.find(o => o.code === phoneCode)?.flag}
+      </span>
+      {phoneCode}
+    </div>
+
+    {open && (
+      <div className="select-dropdown">
+        {options.map((opt) => (
+          <div
+            key={opt.code}
+            className="select-item"
+            onClick={() => {
+              setPhoneCode(opt.code);
+              setOpen(false);
+
+              const onlyNumbers = passenger.phone.replace(/\D/g, '').slice(-9);
+
+              setPassenger({
+                ...passenger,
+                phone: opt.code + onlyNumbers
+              });
+            }}
+          >
+            {opt.flag} {opt.code}
+          </div>
+        ))}
+      </div>
+    )}
+
+  </div>
+
+  <input
+    placeholder="Номер телефону"
+    value={passenger.phone.replace(phoneCode, '')}
+    maxLength={9}
+    onChange={(e) => {
+      const number = e.target.value.replace(/\D/g, '').slice(0, 9);
+
+      setPassenger({
+        ...passenger,
+        phone: phoneCode + number
+      });
+    }}
+  />
+</div>
                   <input placeholder="Email" value={passenger.email} onChange={(e) => setPassenger({ ...passenger, email: e.target.value })} />
                 </div>
 

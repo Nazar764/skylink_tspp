@@ -365,3 +365,58 @@
     width: 170px;
   }
 }
+
+/* Контейнер телефону в профілі */
+.info-item .phone-input-box {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Код країни */
+.info-item .select-selected {
+  height: 49px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 500; /* було 900 → нормальний */
+  border-radius: 10px;
+  border: 1.5px solid #d1d5db;
+  box-shadow: none;
+}
+
+/* стрілка */
+.info-item .select-selected::after {
+  font-size: 14px;
+}
+
+/* dropdown */
+.info-item .select-dropdown {
+  top: 52px;
+  border-radius: 10px;
+  border: 1.5px solid #d1d5db;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* елементи dropdown */
+.info-item .select-item {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* input номера */
+.info-item .phone-input-box input {
+  height: 49px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 500; /* було жирно → норм */
+  border-radius: 10px;
+  border: 1.5px solid #d1d5db;
+  box-shadow: none;
+}
+
+/* focus */
+.info-item .phone-input-box input:focus,
+.info-item .select-selected:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+}

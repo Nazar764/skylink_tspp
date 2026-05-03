@@ -1,0 +1,245 @@
+.plane-wrapper {
+  margin-top: 28px;
+  background: #f8fbff;
+  border: 1px solid #dbeafe;
+  border-radius: 24px;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.plane-scroll {
+  width: 100%;
+  overflow: hidden;
+}
+
+.aircraft {
+  width: 100%;
+  height: 370px;
+  position:relative;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 34px;
+}
+
+.aircraft::before {
+  content: "";
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  top: 58px;
+  bottom: 58px;
+  background: #ffffff;
+  border: 4px solid #d7e4ef;
+  border-radius: 150px 90px 90px 150px;
+  box-shadow: inset 0 0 0 5px #f1f7fc;
+  z-index: 0;
+}
+
+.cockpit {
+  width: 145px;
+  height: 170px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(2, 42px);
+  justify-content: center;
+  align-content: center;
+  gap: 22px;
+  border-right: 3px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.pilot-seat {
+  width: 42px;
+  height: 34px;
+  margin-bottom: 20px;
+  margin-left: 40px;
+  border-radius: 10px;
+  background: #e5e7eb;
+  border: 3px solid #94a3b8;
+}
+
+.cabin {
+  flex: 1;
+  height: 190px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-left: 24px;
+  min-width: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section-title {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #1e3a5f;
+}
+
+.business-section {
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.business-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 40px);
+  grid-template-rows: repeat(4, 32px);
+  gap: 10px 18px;
+}
+
+.business-grid .plane-seat:nth-child(n + 9) {
+  display: none;
+}
+
+.divider {
+  width: 3px;
+  height: 180px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    #cbd5e1 15%,
+    #94a3b8 50%,
+    #cbd5e1 85%,
+    transparent
+  );
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.economy-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.economy-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(12, 34px);
+  grid-template-rows: 30px 30px 32px 30px 30px;
+  gap: 8px 7px;
+  justify-content: center;
+  align-content: center;
+}
+
+.economy-grid .plane-seat:nth-child(4n + 1) {
+  grid-row: 1;
+}
+
+.economy-grid .plane-seat:nth-child(4n + 2) {
+  grid-row: 2;
+}
+
+.economy-grid .plane-seat:nth-child(4n + 3) {
+  grid-row: 4;
+}
+
+.economy-grid .plane-seat:nth-child(4n + 4) {
+  grid-row: 5;
+}
+
+.plane-seat {
+  width: 34px;
+  height: 30px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 900;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+
+.plane-seat:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 15px rgba(15, 23, 42, 0.15);
+}
+
+.plane-seat.free {
+  background: #dcfce7;
+  border-color: #22c55e;
+  color: #15803d;
+}
+
+.plane-seat.occupied {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #b91c1c;
+  cursor: not-allowed;
+}
+
+.plane-seat.locked {
+  background: #e5e7eb;
+  border-color: #94a3b8;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.plane-seat.selected {
+  background: #0ea5e9;
+  border-color: #0284c7;
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(14, 165, 233, 0.28);
+}
+
+.plane-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 10px;
+  font-weight: 800;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.plane-legend span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.plane-legend i {
+  width: 15px;
+  height: 15px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.legend-free {
+  background: #dcfce7;
+  border: 2px solid #22c55e;
+}
+
+.legend-occupied {
+  background: #fee2e2;
+  border: 2px solid #ef4444;
+}
+
+.legend-locked {
+  background: #e5e7eb;
+  border: 2px solid #94a3b8;
+}
+
+.legend-selected {
+  background: #0ea5e9;
+  border: 2px solid #0284c7;
+}
+
+.plane-loader {
+  margin-top: 28px;
+  padding: 30px;
+  border-radius: 22px;
+  background: #f8fbff;
+  border: 1px solid #dbeafe;
+  text-align: center;
+  color: #64748b;
+  font-weight: 900;
+}

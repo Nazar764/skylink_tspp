@@ -140,8 +140,6 @@ const Profile: React.FC = () => {
 
       setAvatarPreview(formData.avatar_url);
       setIsEditing(false);
-
-      alert('Дані успішно оновлено!');
     } catch (err) {
       alert('Помилка при оновленні');
       console.error(err);
@@ -183,7 +181,6 @@ const Profile: React.FC = () => {
           <div className="bonus-card">
             <span>Бонуси</span>
             <strong>{user?.bonus_points || 0}</strong>
-            <small>для майбутніх польотів</small>
           </div>
 
           <div className="profile-actions">

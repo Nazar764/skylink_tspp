@@ -75,23 +75,23 @@
 }
 
 .bonus-card {
-  background: linear-gradient(135deg, #3498db, #2980b9);
-  color: white;
-  padding: 18px;
+  background: linear-gradient(135deg, #ffff1a, #ffff80);
+  color: black;
+  padding: 15px;
   border-radius: 16px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   margin-bottom: 20px;
 }
 
 .bonus-card span {
-  font-size: 13px;
+  font-size: 18px;
   opacity: 0.9;
 }
 
 .bonus-card strong {
-  font-size: 34px;
+  font-size: 30px;
   line-height: 1;
 }
 

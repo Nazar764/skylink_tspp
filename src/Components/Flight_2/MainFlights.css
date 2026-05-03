@@ -467,3 +467,75 @@
     width: 100%;
   }
 }
+
+.flight-images {
+  position: relative;
+  height: 170px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #0a192f;
+}
+
+.flight-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.flight-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.75);
+  transition: 0.35s;
+}
+
+.flight-card-big:hover .flight-image img {
+  transform: scale(1.08);
+  filter: brightness(0.9);
+}
+
+.flight-image span {
+  position: absolute;
+  bottom: 14px;
+  z-index: 3;
+  color: white;
+  font-weight: 900;
+  font-size: 15px;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.65);
+}
+
+.flight-image-from span {
+  left: 18px;
+}
+
+.flight-image-to span {
+  right: 18px;
+}
+
+.flight-image-from {
+  clip-path: polygon(0 0, 100% 0, 82% 100%, 0% 100%);
+}
+
+.flight-image-to {
+  clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%);
+  margin-left: -45px;
+}
+
+.diagonal-line {
+  position: absolute;
+  top: -24px;
+  left: 46%;
+  width: 14px;
+  height: 200px;
+  background: #ffffff; /* без прозорості */
+  transform: rotate(17.1deg);
+  z-index: 4;
+  box-shadow: 2px 0 18px rgba(0, 0, 0, 0.25); /* щоб було видно на світлому */
+}
+
+.filter-actions {
+  align-items: center;
+}
+
+

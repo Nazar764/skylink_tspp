@@ -1,6 +1,6 @@
-/*Навігація по сайту має дублюватись на кожну вкладку*/
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../../utils/supabase';
 import './Navigation.css';
 
 interface NavigationProps {
@@ -8,22 +8,67 @@ interface NavigationProps {
   onLoginClick: () => void;
   onRegisterClick: () => void;
   onSignOut: () => void;
-  onChatOpen: () => void; // Додано, бо воно було в props, але не використовувалося в деструктуризації
+  onChatOpen: () => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ user, onLoginClick, onRegisterClick, onSignOut }) => {
+interface ClientProfile {
+  full_name: string;
+  avatar_url: string | null;
+}
+
+const Navigation: React.FC<NavigationProps> = ({
+  user,
+  onLoginClick,
+  onRegisterClick,
+  onSignOut,
+}) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [clientProfile, setClientProfile] = useState<ClientProfile | null>(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchClientProfile = async () => {
+      if (!user?.email) {
+        setClientProfile(null);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('clients')
+        .select('full_name, avatar_url')
+        .eq('email', user.email)
+        .single();
+
+      if (error) {
+        console.error('Navigation profile error:', error.message);
+        return;
+      }
+
+      setClientProfile(data);
+    };
+
+    fetchClientProfile();
+  }, [user]);
 
   const toggleMenu = () => setMenuOpen((current) => !current);
   const closeMenu = () => setMenuOpen(false);
   const toggleUserMenu = () => setUserMenuOpen((current) => !current);
   const closeUserMenu = () => setUserMenuOpen(false);
 
-  const displayName = user?.user_metadata?.full_name || user?.email || 'Користувач';
-  const avatarUrl = user?.user_metadata?.avatar_url || user?.app_metadata?.provider_avatar_url || null;
+  const displayName =
+    clientProfile?.full_name ||
+    user?.user_metadata?.full_name ||
+    user?.email ||
+    'Користувач';
+
+  const avatarUrl =
+    clientProfile?.avatar_url ||
+    user?.user_metadata?.avatar_url ||
+    user?.app_metadata?.provider_avatar_url ||
+    null;
+
   const initials = displayName
     .split(' ')
     .map((part: string) => part[0])
@@ -46,7 +91,7 @@ const Navigation: React.FC<NavigationProps> = ({ user, onLoginClick, onRegisterC
         </div>
         Sky<span>Link</span>
       </div>
-      
+
       <button
         type="button"
         className={`burger ${menuOpen ? 'open' : ''}`}
@@ -66,40 +111,48 @@ const Navigation: React.FC<NavigationProps> = ({ user, onLoginClick, onRegisterC
         <li><Link to="/luggage" onClick={closeMenu}>Багаж</Link></li>
         <li><Link to="/support" onClick={closeMenu}>Підтримка</Link></li>
       </ul>
-      
+
       <div className="nav-btns">
         {user ? (
           <div className="user-block">
             <button className="user-pill" type="button" onClick={toggleUserMenu}>
               {avatarUrl ? (
-                <img 
-                  className="user-avatar" 
-                  src={avatarUrl} 
-                  alt="Аватар" 
-                  onError={(e) => { e.currentTarget.src = 'https://ui-avatars.com/api/?name=' + initials + '&background=random' }} 
+                <img
+                  className="user-avatar"
+                  src={avatarUrl}
+                  alt="Аватар"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
               ) : (
                 <div className="user-avatar user-avatar--fallback">{initials}</div>
               )}
+
               <span>{displayName}</span>
             </button>
-            
+
             {userMenuOpen && (
-              // Прибрав onMouseLeave для тестування
               <div className="user-menu">
                 <div className="user-menu__header">Мій акаунт</div>
+
                 <div className="user-menu__actions">
                   <button type="button" className="btn-ghost" onClick={handleGoToProfile}>
-                   Профіль
+                    Профіль
                   </button>
+
                   <button type="button" className="btn-ghost" onClick={closeUserMenu}>
                     Мої квитки
                   </button>
                 </div>
-                <button 
-                  type="button" 
-                  className="btn-ghost btn-ghost--danger user-menu__logout" 
-                  onClick={() => { onSignOut(); closeUserMenu(); }}
+
+                <button
+                  type="button"
+                  className="btn-ghost btn-ghost--danger user-menu__logout"
+                  onClick={() => {
+                    onSignOut();
+                    closeUserMenu();
+                  }}
                 >
                   Вийти
                 </button>
@@ -108,8 +161,13 @@ const Navigation: React.FC<NavigationProps> = ({ user, onLoginClick, onRegisterC
           </div>
         ) : (
           <>
-            <button className="btn-ghost" type="button" onClick={onLoginClick}>Увійти</button>
-            <button className="btn-primary" type="button" onClick={onRegisterClick}>Реєстрація</button>
+            <button className="btn-ghost" type="button" onClick={onLoginClick}>
+              Увійти
+            </button>
+
+            <button className="btn-primary" type="button" onClick={onRegisterClick}>
+              Реєстрація
+            </button>
           </>
         )}
       </div>

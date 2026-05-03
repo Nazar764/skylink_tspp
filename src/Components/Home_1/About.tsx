@@ -7,18 +7,18 @@ interface AboutProps {
 }
 
 interface UserProfile {
-  client_id: number;
+  id: number;
   full_name: string;
   avatar_url: string;
 }
 
 interface Comment {
-  review_id: number;
+  id: number;
   client_id: number;
   rating: number;
   text: string;
   created_at: string;
-  clients?: UserProfile;
+  clients?: UserProfile | null;
 }
 
 const About: React.FC<AboutProps> = ({ onChatOpen }) => {
@@ -55,16 +55,15 @@ const About: React.FC<AboutProps> = ({ onChatOpen }) => {
     const { data, error } = await supabase
       .from('reviews')
       .select(`
-        review_id,
-        client_id,
+        id,
         rating,
         text,
         created_at,
         clients (
-          client_id,
+          id,
           full_name,
           avatar_url
-        )
+          )
       `)
       .order('created_at', { ascending: false });
 
@@ -83,7 +82,7 @@ const About: React.FC<AboutProps> = ({ onChatOpen }) => {
     // Спочатку знаходимо id клієнта в таблиці clients за його email з Auth
     const { data: clientData, error: clientError } = await supabase
       .from('clients')
-      .select('client_id')
+      .select('id')
       .eq('email', user.email)
       .single();
 
@@ -97,7 +96,7 @@ const About: React.FC<AboutProps> = ({ onChatOpen }) => {
       .from('reviews')
       .insert([
         { 
-          client_id: clientData.client_id, 
+          client_id: clientData.id, 
           rating: newRating, 
           text: newText 
         }
@@ -106,7 +105,7 @@ const About: React.FC<AboutProps> = ({ onChatOpen }) => {
     if (!error) {
       setNewText('');
       setNewRating(0);
-      fetchComments(); // Оновлюємо список коментарів (*refresh the comments list* [оновити список коментарів])
+      await fetchComments();
     } else {
       console.error("Помилка відправки відгуку:", error.message);
     }
@@ -283,7 +282,7 @@ const About: React.FC<AboutProps> = ({ onChatOpen }) => {
           {/* Список коментарів */}
           <div className="comment-list">
             {sortedComments.map((c) => (
-              <article className="comment-card" key={c.review_id}>
+              <article className="comment-card" key={`comment-${c.id}`}>
                 <div className="comment-header">
                   <div className="avatar">
                     {c.clients?.avatar_url ? (

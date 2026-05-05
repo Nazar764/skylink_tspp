@@ -25,32 +25,47 @@ const Navigation: React.FC<NavigationProps> = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [clientProfile, setClientProfile] = useState<ClientProfile | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchClientProfile = async () => {
-      if (!user?.email) {
-        setClientProfile(null);
-        return;
-      }
+useEffect(() => {
+  const fetchUserData = async () => {
+    if (!user?.email) {
+      setClientProfile(null);
+      setIsAdmin(false);
+      return;
+    }
 
-      const { data, error } = await supabase
-        .from('clients')
-        .select('full_name, avatar_url')
-        .eq('email', user.email)
-        .single();
+    const { data: clientData, error: clientError } = await supabase
+      .from('clients')
+      .select('full_name, avatar_url')
+      .eq('email', user.email)
+      .single();
 
-      if (error) {
-        console.error('Navigation profile error:', error.message);
-        return;
-      }
+    if (clientError) {
+      console.error('Navigation profile error:', clientError.message);
+    } else {
+      setClientProfile(clientData);
+    }
 
-      setClientProfile(data);
-    };
+    const { data: roleData, error: roleError } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('auth_id', user.id)
+      .single();
 
-    fetchClientProfile();
-  }, [user]);
+    if (roleError) {
+      console.error('Role error:', roleError.message);
+      setIsAdmin(false);
+      return;
+    }
+
+    setIsAdmin(roleData?.role === 'admin');
+  };
+
+  fetchUserData();
+}, [user]);
 
   const toggleMenu = () => setMenuOpen((current) => !current);
   const closeMenu = () => setMenuOpen(false);
@@ -80,6 +95,8 @@ const Navigation: React.FC<NavigationProps> = ({
     navigate('/profile');
     closeUserMenu();
   };
+
+
 
   return (
     <nav>
@@ -145,6 +162,9 @@ const Navigation: React.FC<NavigationProps> = ({
                  Мої квитки 
                 </button>
                 </div>
+                {isAdmin && (
+                  <button type="button" className="btn-ghost" onClick={() => {closeUserMenu(); navigate('/admin');}} > Адмін панель </button>
+                )}
 
                 <button
                   type="button"

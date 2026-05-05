@@ -10,16 +10,18 @@ import Support from './pages/Support';
 import ChatBot from './Components/Home_1/ChatBot';
 import { supabase } from './utils/supabase';
 import MyTickets from './Components/Allused_0/MyTickets';
-import  Profile  from './Components/Allused_0/Profile';
+import Profile from './Components/Allused_0/Profile';
 import FlightBooking from './Components/Flight_2/FlightBooking';
+import AdminPanel from './Components/Allused_0/AdminPanel';
 import type { User } from '@supabase/supabase-js';
 
-import './App.css'; 
+import './App.css';
 
 const App: React.FC = () => {
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [authMode, setAuthMode] = useState<'signIn' | 'signUp' | null>(null);
+  const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -38,9 +40,35 @@ const App: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const fetchRole = async () => {
+      if (!user?.id) {
+        setRole(null);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('auth_id', user.id)
+        .single();
+
+      if (error) {
+        console.error('Role error:', error.message);
+        setRole(null);
+        return;
+      }
+
+      setRole(data?.role || null);
+    };
+
+    fetchRole();
+  }, [user]);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setAuthMode(null);
+    setRole(null);
   };
 
   return (
@@ -52,17 +80,25 @@ const App: React.FC = () => {
         onSignOut={handleSignOut}
         onChatOpen={() => setIsChatOpen(true)}
       />
+
       <Routes>
         <Route path="/" element={<Home onChatOpen={() => setIsChatOpen(true)} />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/flights" element={<Flights />} />
         <Route path="/my-tickets" element={<MyTickets />} />
+
+        <Route
+          path="/admin"
+          element={role === 'admin' ? <AdminPanel /> : <Navigate to="/" replace />}
+        />
+
         <Route path="/Reservation" element={<TAXI_HOTEL />} />
         <Route path="/luggage" element={<Luggage />} />
         <Route path="/support" element={<Support />} />
         <Route path="/booking/:id" element={<FlightBooking />} />
         <Route path="*" element={<Navigate replace to="/" />} />
       </Routes>
+
       <ChatBot isOpen={isChatOpen} onToggle={setIsChatOpen} />
       <AuthModal mode={authMode} onClose={() => setAuthMode(null)} />
     </BrowserRouter>

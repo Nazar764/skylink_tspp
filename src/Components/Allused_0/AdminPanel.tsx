@@ -860,23 +860,53 @@ const AdminPanel: React.FC = () => {
                           <option value="support">support</option>
                         </select>
                       </td>
-                      <td className="admin-actions">
-                        <button
-                          className="admin-small-btn"
-                          type="button"
-                          onClick={() => updateBonusPoints(client, 100)}
-                        >
-                          +100
-                        </button>
+                      <td className="admin-actions admin-bonus-actions">
+  <input
+    className="admin-bonus-input"
+    type="number"
+    min="1"
+    placeholder="Сума"
+    id={`bonus-${client.id}`}
+  />
 
-                        <button
-                          className="admin-small-btn"
-                          type="button"
-                          onClick={() => updateBonusPoints(client, -100)}
-                        >
-                          -100
-                        </button>
-                      </td>
+  <button
+    className="admin-small-btn"
+    type="button"
+    onClick={() => {
+      const input = document.getElementById(`bonus-${client.id}`) as HTMLInputElement;
+      const amount = Number(input?.value);
+
+      if (!amount || amount <= 0) {
+        showMessage('Введи суму бонусів');
+        return;
+      }
+
+      updateBonusPoints(client, amount);
+      input.value = '';
+    }}
+  >
+    Додати
+  </button>
+
+  <button
+    className="admin-danger-btn"
+    type="button"
+    onClick={() => {
+      const input = document.getElementById(`bonus-${client.id}`) as HTMLInputElement;
+      const amount = Number(input?.value);
+
+      if (!amount || amount <= 0) {
+        showMessage('Введи суму бонусів');
+        return;
+      }
+
+      updateBonusPoints(client, -amount);
+      input.value = '';
+    }}
+  >
+    Списати
+  </button>
+</td>
                     </tr>
                   ))}
                 </tbody>
